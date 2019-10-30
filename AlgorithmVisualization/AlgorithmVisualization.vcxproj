@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\MouseWrapper.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\AlgorithmVisualization.cpp" />
@@ -30,6 +31,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\MouseWrapper.h" />
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\pch.h" />

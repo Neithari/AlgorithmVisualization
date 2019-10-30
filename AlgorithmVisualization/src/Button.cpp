@@ -3,6 +3,7 @@
 
 Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::String& buttonText, std::shared_ptr<sf::Font> font, unsigned int fontSize)
 	:
+	lable(buttonText.toAnsiString()),
 	font(font),
 	buttonText(buttonText, *this->font, fontSize),
 	shape(size),
@@ -40,7 +41,7 @@ void Button::Update(const sf::Vector2f& mousePosition)
 	CheckState();
 }
 
-void Button::Render(sf::RenderTarget* target)
+void Button::Render(sf::RenderTarget* target) const
 {
 	target->draw(shape);
 	target->draw(buttonText);
@@ -49,6 +50,11 @@ void Button::Render(sf::RenderTarget* target)
 const bool Button::IsPressed() const
 {
 	return currentState == ButtonStates::pressed;
+}
+
+const std::string Button::GetLabel() const
+{
+	return lable;
 }
 
 void Button::CheckState()

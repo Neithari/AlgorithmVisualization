@@ -8,10 +8,10 @@ Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf:
 	shape(size),
 	idleColor(0, 128, 128),
 	hoverColor(0, 179, 179),
-	pressedColor(0, 179, 179),
+	pressedColor(0, 230, 230),
 	idleBorderColor(0, 179, 179),
 	hoverBorderColor(0, 230, 230),
-	pressedBorderColor(0, 230, 230)
+	pressedBorderColor(0, 179, 179)
 {
 	// Setup the shape
 	shape.setPosition(position);

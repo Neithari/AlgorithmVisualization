@@ -24,7 +24,7 @@ int main()
 	sf::Vector2f buttonSize(200.0f, 40.0f);
 	Button button1(buttonPos, buttonSize, "Press Me", FontPressStart, 20);
 
-	int count = 0;
+	int reset = 0;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -35,6 +35,16 @@ int main()
 		}
 		
 		button1.Update(mouse.GetPosition());
+		if (button1.IsPressed())
+		{
+			shape.setFillColor(sf::Color::Blue);
+		}
+		if (reset > 5000)
+		{
+			reset = 0;
+			shape.setFillColor(sf::Color::Green);
+		}
+		reset++;
 		// Draw
 		window.clear();
 		window.draw(shape);

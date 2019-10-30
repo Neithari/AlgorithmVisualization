@@ -11,6 +11,7 @@ public:
 
 	void Update(const sf::Vector2f& mousePosition);
 	void Render(sf::RenderTarget* target);
+
 	const bool IsPressed() const;
 
 private:

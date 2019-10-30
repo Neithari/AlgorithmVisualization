@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\MouseWrapper.cpp" />
+    <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\AlgorithmVisualization.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -28,7 +30,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\MouseWrapper.h" />
+    <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman.ttf" />
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman_Bold.ttf" />
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman_Italic.ttf" />
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman_Italic_Bold.ttf" />
+    <Font Include="assets\fonts\press-start\prstart.ttf" />
+    <Font Include="assets\fonts\press-start\prstartk.ttf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

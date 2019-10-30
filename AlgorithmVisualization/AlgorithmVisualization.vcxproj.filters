@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Precompiled Header">
       <UniqueIdentifier>{249cbf3a-18a3-4488-b009-8b90ad570b9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Fonts">
+      <UniqueIdentifier>{7dab4617-461c-414b-b0c8-7ffe33786d11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AlgorithmVisualization.cpp">
@@ -24,10 +27,42 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>Header Files\Precompiled Header</Filter>
     </ClCompile>
+    <ClCompile Include="src\Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MouseWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
       <Filter>Header Files\Precompiled Header</Filter>
     </ClInclude>
+    <ClInclude Include="src\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MouseWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman_Italic_Bold.ttf">
+      <Filter>Resource Files\Fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman.ttf">
+      <Filter>Resource Files\Fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman_Bold.ttf">
+      <Filter>Resource Files\Fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\dustismo-roman\Dustismo_Roman_Italic.ttf">
+      <Filter>Resource Files\Fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\press-start\prstart.ttf">
+      <Filter>Resource Files\Fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\press-start\prstartk.ttf">
+      <Filter>Resource Files\Fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

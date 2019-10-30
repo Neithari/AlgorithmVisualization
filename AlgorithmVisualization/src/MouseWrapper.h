@@ -12,6 +12,6 @@ private:
 	void ClampToWindow(sf::Vector2i& mousePos) const;
 
 private:
-	const unsigned int screenWidth, screenHeight;
+	const int screenWidth, screenHeight;
 	const sf::Window& window;
 };

@@ -3,16 +3,17 @@
 
 class System
 {
-private:
-	System(const unsigned int windowWidth = 1024, const unsigned int windowHeight = 768);
+private: // Constructor is private to permit more than one construction
+	System(const int windowWidth = 1024, const int windowHeight = 768);
 public: // Constructors, destructors, assignments in here
-	static System& Instance();
 	System(const System&) = delete;
 	System& operator=(const System&) = delete;
 	System(System&&) = delete;
 	System& operator=(System&&) = delete;
 
 public: // Public functions go in here
+	// Access the only System instance
+	static System& Instance();
 	// Use only from main()
 	void Run();
 
@@ -26,6 +27,9 @@ private: // Private functions go in here
 	// Clamp a position to the window. THIS WILL CHANGE THE GIVEN POSITION
 	template <typename T>
 	void ClampPositionToWindow(T& position) const;
+	// Setup function
+	void SetupEverything();
+	void LoadFonts();
 
 public: // Public variables go in here
 	const int windowWidth;
@@ -36,10 +40,11 @@ private: // Private variables go in here
 	static System instance;
 	// The main window
 	sf::RenderWindow window;
-	// Create menu
-	Menu topMenu;
 	// Fonts
 	std::shared_ptr<sf::Font> FontPressStart = std::make_shared<sf::Font>();
+	std::shared_ptr<sf::Font> FontDustismoRoman = std::make_shared<sf::Font>();
+	// Create menu
+	Menu topMenu;
 
 	// Test shape
 	sf::CircleShape shape = sf::CircleShape(100.0f);

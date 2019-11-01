@@ -9,28 +9,24 @@ System& System::Instance()
 	return instance;
 }
 
-System::System(const unsigned int windowWidth, const unsigned int windowHeight)
+System::System(const int windowWidth, const int windowHeight)
 	: windowWidth(windowWidth), windowHeight(windowHeight),
 	window(sf::VideoMode(windowWidth, windowHeight), "Algorithm Visualisation"),
-	topMenu(windowWidth, windowHeight)
+	topMenu(FontDustismoRoman)
 {
+	LoadFonts();
+
 	// Create buttons in topMenu
 	topMenu.CreateButton("Dijkstra's");
 	topMenu.CreateButton("A*");
 	topMenu.CreateButton("Breadth-First");
 	topMenu.CreateButton("Depth-First");
 	topMenu.CreateButton("Greedy");
-
-	if (!FontPressStart->loadFromFile("assets/fonts/press-start/prstart.ttf"))
-	{
-		std::cerr << "Font could not be loaded" << std::endl;
-	}
 }
 
 void System::Run()
 {
-	// Test shape
-	shape.setFillColor(sf::Color::Green);
+	SetupEverything();
 
 	// Main loop
 	while (window.isOpen())
@@ -102,4 +98,22 @@ void System::Render()
 
 	// Display rendered items
 	window.display();
+}
+
+void System::SetupEverything()
+{
+	// Test shape
+	shape.setFillColor(sf::Color::Green);
+}
+
+void System::LoadFonts()
+{
+	if (!FontPressStart->loadFromFile("assets/fonts/press-start/prstart.ttf"))
+	{
+		std::cerr << "Font \"prstart.ttf\" could not be loaded" << std::endl;
+	}
+	if (!FontDustismoRoman->loadFromFile("assets/fonts/dustismo-roman/Dustismo_Roman.ttf"))
+	{
+		std::cerr << "Font \"Dustismo_Roman.ttf\" could not be loaded" << std::endl;
+	}
 }

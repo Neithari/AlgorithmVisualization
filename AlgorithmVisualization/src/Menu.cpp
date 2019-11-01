@@ -2,14 +2,9 @@
 #include "Menu.h"
 #include "System.h"
 
-Menu::Menu(const unsigned int windowWidth, const unsigned int windowHeight)
-	: windowWidth(windowWidth), windowHeight(windowHeight)
+Menu::Menu(std::shared_ptr<sf::Font> buttonFont)
+	: buttonFont(buttonFont)
 {
-	// Load the font
-	if (!buttonFont->loadFromFile("assets/fonts/dustismo-roman/Dustismo_Roman.ttf"))
-	{
-		std::cerr << "Font could not be loaded" << std::endl;
-	}
 }
 
 void Menu::Update()

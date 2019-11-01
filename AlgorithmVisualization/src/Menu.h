@@ -24,15 +24,15 @@ private:
 private:
 	const int windowWidth, windowHeight;
 	const MouseWrapper& mouse;
-
+	// For Button size and positioning
 	std::vector<Button> buttons;
 	const sf::Vector2f buttonSize = sf::Vector2f(100.0f, 30.0f);
 	sf::Vector2f buttonPosition = sf::Vector2f(20.0f, 10.0f);
-
+	static constexpr float buttonPadding = 20.0f;
+	// For the font
 	std::shared_ptr<sf::Font> buttonFont = std::make_shared<sf::Font>();
 	static constexpr unsigned int buttonFontSize = 16;
-	static constexpr float buttonPadding = 20.0f;
-
+	// For the selection process
 	std::string currentSelect;
 	bool newSelect = false;
 };

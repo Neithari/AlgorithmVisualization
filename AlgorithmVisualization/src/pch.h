@@ -6,6 +6,7 @@
 #include <thread>
 #include <mutex>
 #include <chrono>
+#include <cassert>
 
 // Data structures
 #include <string>

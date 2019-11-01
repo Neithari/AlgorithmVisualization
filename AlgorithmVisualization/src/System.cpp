@@ -1,19 +1,19 @@
 #include "pch.h"
 #include "System.h"
 
-// Used to ensure only one system is present at any time
-bool System::instantiated = false;
+// Used to ensure only one system is present at any time. Linker needs it here.
+System System::instance;
+
+System& System::Instance()
+{
+	return instance;
+}
 
 System::System(const unsigned int windowWidth, const unsigned int windowHeight)
 	: windowWidth(windowWidth), windowHeight(windowHeight),
 	window(sf::VideoMode(windowWidth, windowHeight), "Algorithm Visualisation"),
-	mouse(windowWidth, windowHeight, window),
-	topMenu(windowWidth, windowHeight, mouse)
+	topMenu(windowWidth, windowHeight)
 {
-	// Make sure only one system is initialized
-	assert(!instantiated);
-	instantiated = true;
-
 	// Create buttons in topMenu
 	topMenu.CreateButton("Dijkstra's");
 	topMenu.CreateButton("A*");
@@ -25,11 +25,6 @@ System::System(const unsigned int windowWidth, const unsigned int windowHeight)
 	{
 		std::cerr << "Font could not be loaded" << std::endl;
 	}
-}
-
-System::~System()
-{
-	instantiated = false;
 }
 
 void System::Run()
@@ -46,6 +41,13 @@ void System::Run()
 
 		Render();
 	}
+}
+
+sf::Vector2f System::GetMousePosition() const
+{
+	auto mousePosition = sf::Mouse::getPosition(window);
+	ClampPositionToWindow(mousePosition);
+	return sf::Vector2f((float)mousePosition.x, (float)mousePosition.y);
 }
 
 void System::HandleSFEvents()

@@ -1,11 +1,10 @@
 #pragma once
 #include "Button.h"
-#include "MouseWrapper.h"
 
 class Menu
 {
 public:
-	Menu(const unsigned int windowWidth, const unsigned int windowHeight, const MouseWrapper& mouse);
+	Menu(const unsigned int windowWidth, const unsigned int windowHeight);
 
 	void Update();
 	void Render(sf::RenderTarget* target) const;
@@ -23,7 +22,6 @@ private:
 
 private:
 	const int windowWidth, windowHeight;
-	const MouseWrapper& mouse;
 	// For Button size and positioning
 	std::vector<Button> buttons;
 	const sf::Vector2f buttonSize = sf::Vector2f(100.0f, 30.0f);

@@ -5,9 +5,7 @@
 
 int main()
 {
-	System system(800, 600);
-
-	system.Run();
+	System::Instance().Run();
 
 	return 0;
 }

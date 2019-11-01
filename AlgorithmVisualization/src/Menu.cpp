@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "Menu.h"
+#include "System.h"
 
-Menu::Menu(const unsigned int windowWidth, const unsigned int windowHeight, const MouseWrapper& mouse)
-	: windowWidth(windowWidth), windowHeight(windowHeight), mouse(mouse)
+Menu::Menu(const unsigned int windowWidth, const unsigned int windowHeight)
+	: windowWidth(windowWidth), windowHeight(windowHeight)
 {
 	// Load the font
 	if (!buttonFont->loadFromFile("assets/fonts/dustismo-roman/Dustismo_Roman.ttf"))
@@ -45,7 +46,8 @@ void Menu::UpdateButtons()
 	for (auto& button : buttons)
 	{
 		newSelect = false;
-		button.Update(mouse.GetPosition());
+		
+		button.Update(System::Instance().GetMousePosition());
 		if (button.IsPressed())
 		{
 			newSelect = true;

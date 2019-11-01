@@ -7,7 +7,7 @@ public:
 	Menu(std::shared_ptr<sf::Font> buttonFont);
 
 	void Update();
-	void Render(sf::RenderTarget* target) const;
+	void Render(sf::RenderTarget& target) const;
 
 	void CreateButton(const std::string& buttonName);
 

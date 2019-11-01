@@ -94,7 +94,7 @@ void System::Render()
 
 	// render everything
 	window.draw(shape);
-	topMenu.Render(&window);
+	topMenu.Render(window);
 
 	// Display rendered items
 	window.display();

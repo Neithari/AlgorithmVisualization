@@ -41,10 +41,10 @@ void Button::Update(const sf::Vector2f& mousePosition)
 	CheckState();
 }
 
-void Button::Render(sf::RenderTarget* target) const
+void Button::Render(sf::RenderTarget& target) const
 {
-	target->draw(shape);
-	target->draw(buttonText);
+	target.draw(shape);
+	target.draw(buttonText);
 }
 
 const bool Button::IsPressed() const

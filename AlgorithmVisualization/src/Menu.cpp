@@ -12,7 +12,7 @@ void Menu::Update()
 	UpdateButtons();
 }
 
-void Menu::Render(sf::RenderTarget* target) const
+void Menu::Render(sf::RenderTarget& target) const
 {
 	for (auto& button : buttons)
 	{

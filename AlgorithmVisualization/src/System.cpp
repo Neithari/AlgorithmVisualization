@@ -26,6 +26,14 @@ System::System(const int windowWidth, const int windowHeight)
 
 void System::Run()
 {
+	// Used to ensure Run() is only run once
+	if (runNumber > 0)
+	{
+		return;
+	}
+	runNumber++;
+
+	// Put everything that needs setup in that function
 	SetupEverything();
 
 	// Main loop

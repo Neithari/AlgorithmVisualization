@@ -27,8 +27,9 @@ private: // Private functions go in here
 	// Clamp a position to the window. THIS WILL CHANGE THE GIVEN POSITION
 	template <typename T>
 	void ClampPositionToWindow(T& position) const;
-	// Setup function
+	// Put everything that needs setup in that function
 	void SetupEverything();
+
 	void LoadFonts();
 
 public: // Public variables go in here
@@ -38,6 +39,8 @@ public: // Public variables go in here
 private: // Private variables go in here
 	// Used to ensure only one system is present at any time
 	static System instance;
+	// Used to ensure Run() is only run once
+	int runNumber;
 	// The main window
 	sf::RenderWindow window;
 	// Fonts

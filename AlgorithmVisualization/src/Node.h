@@ -28,6 +28,7 @@ private:
 	const sf::Color wallColor;
 	const sf::Color startColor;
 	const sf::Color finishColor;
+	const sf::Color hoverColor;
 
 	int nodeCost;
 	NodeType type;

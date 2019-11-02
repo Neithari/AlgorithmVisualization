@@ -28,5 +28,6 @@ protected:
 protected:
 	const ClickOptions lable;
 	ClickableStates currentState = ClickableStates::idle;
+	ClickableStates lastState;
 };
 

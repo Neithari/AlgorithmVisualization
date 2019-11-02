@@ -39,7 +39,11 @@ void Button::Update()
 			currentState = ClickableStates::pressed;
 		}
 	}
-	CheckState();
+	if (lastState != currentState)
+	{
+		CheckState();
+	}
+	lastState = currentState;
 }
 
 void Button::Render(sf::RenderTarget& target) const

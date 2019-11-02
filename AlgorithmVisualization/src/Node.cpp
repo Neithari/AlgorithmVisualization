@@ -5,14 +5,16 @@ Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type)
 	:
 	ClickableObject(lable),
 	type(type),
-	nodeSize(20.0f, 20.0f),
+	nodeSize(16.0f, 16.0f),
 	fieldColor(sf::Color::White),
 	wallColor(sf::Color::Red),
 	startColor(sf::Color::Green),
 	finishColor(sf::Color::Blue),
+	hoverColor(0, 179, 179),
 	nodeColor(GetColorForType()),
 	nodeShape(nodeSize)
 {
+	nodeShape.setOutlineThickness(2.0f);
 	nodeShape.setFillColor(nodeColor);
 	nodeShape.setPosition(nodePosition);
 }
@@ -28,7 +30,11 @@ void Node::Update()
 			currentState = ClickableStates::pressed;
 		}
 	}
-	CheckState();
+	if (lastState != currentState)
+	{
+		CheckState();
+	}
+	lastState = currentState;
 }
 
 void Node::Render(sf::RenderTarget& target) const
@@ -38,10 +44,28 @@ void Node::Render(sf::RenderTarget& target) const
 
 void Node::IdleState()
 {
+	switch (type)
+	{
+	case Node::NodeType::field:
+		nodeShape.setOutlineColor(fieldColor);
+		break;
+	case Node::NodeType::wall:
+		nodeShape.setOutlineColor(wallColor);
+		break;
+	case Node::NodeType::start:
+		nodeShape.setOutlineColor(startColor);
+		break;
+	case Node::NodeType::finish:
+		nodeShape.setOutlineColor(finishColor);
+		break;
+	default:
+		break;
+	}
 }
 
 void Node::HoverState()
 {
+	nodeShape.setOutlineColor(hoverColor);
 }
 
 void Node::PressedState()

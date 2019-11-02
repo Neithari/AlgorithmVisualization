@@ -6,6 +6,21 @@ ClickableObject::ClickableObject(ClickOptions lable) : lable(lable)
 {
 }
 
+void ClickableObject::CheckInteraction(sf::Shape& shape)
+{
+	currentState = ClickableStates::idle;
+	if (shape.getGlobalBounds().contains(System::Instance().GetMousePosition()))
+	{
+		currentState = ClickableStates::hover;
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			currentState = ClickableStates::pressed;
+		}
+	}
+
+	CheckState();
+}
+
 void ClickableObject::CheckState()
 {
 	switch (currentState)
@@ -17,10 +32,15 @@ void ClickableObject::CheckState()
 		HoverState();
 		break;
 	case ClickableStates::pressed:
-		PressedState();
+		// This will prevent perma activation when click is held down
+		if (lastState != currentState)
+		{
+			PressedState();
+		}
 		break;
 	default:
 		std::cerr << "Something went wrong with the currentState";
 		break;
 	}
+	lastState = currentState;
 }

@@ -30,20 +30,7 @@ Button::Button(const ClickOptions lable, const sf::Vector2f& position, const sf:
 
 void Button::Update()
 {
-	currentState = ClickableStates::idle;
-	if (shape.getGlobalBounds().contains(System::Instance().GetMousePosition()))
-	{
-		currentState = ClickableStates::hover;
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			currentState = ClickableStates::pressed;
-		}
-	}
-	if (lastState != currentState)
-	{
-		CheckState();
-	}
-	lastState = currentState;
+	CheckInteraction(shape);
 }
 
 void Button::Render(sf::RenderTarget& target) const

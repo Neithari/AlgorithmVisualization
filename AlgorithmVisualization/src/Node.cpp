@@ -21,20 +21,7 @@ Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type)
 
 void Node::Update()
 {
-	currentState = ClickableStates::idle;
-	if (nodeShape.getGlobalBounds().contains(System::Instance().GetMousePosition()))
-	{
-		currentState = ClickableStates::hover;
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			currentState = ClickableStates::pressed;
-		}
-	}
-	if (lastState != currentState)
-	{
-		CheckState();
-	}
-	lastState = currentState;
+	CheckInteraction(nodeShape);
 }
 
 void Node::Render(sf::RenderTarget& target) const

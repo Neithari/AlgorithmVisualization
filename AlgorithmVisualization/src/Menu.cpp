@@ -20,35 +20,17 @@ void Menu::Render(sf::RenderTarget& target) const
 	}
 }
 
-void Menu::CreateButton(const std::string& buttonName)
+void Menu::CreateButton(const ClickOptions lable, const std::string& buttonName)
 {
-	buttons.emplace_back(buttonPosition, buttonSize, buttonName, buttonFont, buttonFontSize);
+	buttons.emplace_back(lable, buttonPosition, buttonSize, buttonName, buttonFont, buttonFontSize);
 	AdvanceButtonPosition();
-}
-
-const bool Menu::SelectChanged() const
-{
-	return newSelect;
-}
-
-const std::string& Menu::GetCurrentSelect() const
-{
-	return currentSelect;
 }
 
 void Menu::UpdateButtons()
 {
 	for (auto& button : buttons)
 	{
-		newSelect = false;
-		
-		button.Update(System::Instance().GetMousePosition());
-		if (button.IsPressed())
-		{
-			newSelect = true;
-			currentSelect = button.GetLabel();
-			return;
-		}
+		button.Update();
 	}
 }
 

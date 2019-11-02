@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ClickableObject.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\AlgorithmVisualization.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ClickableObject.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\pch.h" />

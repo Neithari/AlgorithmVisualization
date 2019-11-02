@@ -1,5 +1,11 @@
 #pragma once
 #include "Menu.h"
+#include "ClickableObject.h"
+
+enum class ClickOptions
+{
+	dijkstra, a, breadth, depth, greedy
+};
 
 class System
 {
@@ -19,6 +25,8 @@ public: // Public functions go in here
 
 	// Gets the adjusted mouse position for our window
 	sf::Vector2f GetMousePosition() const;
+	// Adds a ClickEvent to the cue
+	void AddClickEvent(ClickOptions lable);
 
 private: // Private functions go in here
 	void HandleSFEvents();
@@ -29,8 +37,9 @@ private: // Private functions go in here
 	void ClampPositionToWindow(T& position) const;
 	// Put everything that needs setup in that function
 	void SetupEverything();
-
 	void LoadFonts();
+	// Process the click events from CklickableObjects
+	void HandleClickEvent();
 
 public: // Public variables go in here
 	const int windowWidth;
@@ -46,6 +55,9 @@ private: // Private variables go in here
 	// Fonts
 	std::shared_ptr<sf::Font> FontPressStart = std::make_shared<sf::Font>();
 	std::shared_ptr<sf::Font> FontDustismoRoman = std::make_shared<sf::Font>();
+	// Vector to store every click event for processing
+	std::vector<ClickOptions> clickEventQ;
+
 	// Create menu
 	Menu topMenu;
 

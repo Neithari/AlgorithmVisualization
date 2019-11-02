@@ -4,17 +4,12 @@
 class Menu
 {
 public:
-	Menu(std::shared_ptr<sf::Font> buttonFont);
+	explicit Menu(std::shared_ptr<sf::Font> buttonFont);
 
 	void Update();
 	void Render(sf::RenderTarget& target) const;
 
-	void CreateButton(const std::string& buttonName);
-
-	// Returns true if a menu button got pressed
-	const bool SelectChanged() const;
-	// Get the last selected menu option
-	const std::string& GetCurrentSelect() const;
+	void CreateButton(const ClickOptions lable, const std::string& buttonName);
 
 private:
 	void UpdateButtons();
@@ -29,7 +24,4 @@ private:
 	// For the font
 	std::shared_ptr<sf::Font> buttonFont;
 	static constexpr unsigned int buttonFontSize = 16;
-	// For the selection process
-	std::string currentSelect;
-	bool newSelect = false;
 };

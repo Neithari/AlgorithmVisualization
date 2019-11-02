@@ -1,27 +1,21 @@
 #pragma once
-
-enum class ButtonStates
-{
-	idle, hover, pressed
-};
-class Button
+#include "ClickableObject.h"
+class Button : public ClickableObject
 {
 public:
-	Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::String& buttonText, std::shared_ptr<sf::Font> font, unsigned int fontSize);
+	Button(const ClickOptions lable, const sf::Vector2f& position, const sf::Vector2f& size, const sf::String& buttonText, std::shared_ptr<sf::Font> font, unsigned int fontSize);
+	~Button() = default;
 
-	void Update(const sf::Vector2f& mousePosition);
+	void Update();
 	void Render(sf::RenderTarget& target) const;
 
-	const bool IsPressed() const;
-	const std::string GetLabel() const;
+private:
+	// Used that every child must implement their own state behavior
+	void IdleState();
+	void HoverState();
+	void PressedState();
 
 private:
-	void CheckState();
-
-private:
-	ButtonStates currentState = ButtonStates::idle;
-	const std::string lable;
-
 	std::shared_ptr<sf::Font> font;
 	sf::Text buttonText;
 

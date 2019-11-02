@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "System.h"
 
-// Used to ensure only one system is present at any time. Linker needs it here.
+// Used to ensure only one system is present at any time and the instance is globally accessible.
 System System::instance;
 
 System& System::Instance()
@@ -17,11 +17,11 @@ System::System(const int windowWidth, const int windowHeight)
 	LoadFonts();
 
 	// Create buttons in topMenu
-	topMenu.CreateButton("Dijkstra's");
-	topMenu.CreateButton("A*");
-	topMenu.CreateButton("Breadth-First");
-	topMenu.CreateButton("Depth-First");
-	topMenu.CreateButton("Greedy");
+	topMenu.CreateButton(ClickOptions::dijkstra, "Dijkstra's");
+	topMenu.CreateButton(ClickOptions::a, "A*");
+	topMenu.CreateButton(ClickOptions::breadth, "Breadth-First");
+	topMenu.CreateButton(ClickOptions::depth, "Depth-First");
+	topMenu.CreateButton(ClickOptions::greedy, "Greedy");
 }
 
 void System::Run()
@@ -54,6 +54,12 @@ sf::Vector2f System::GetMousePosition() const
 	return sf::Vector2f((float)mousePosition.x, (float)mousePosition.y);
 }
 
+void System::AddClickEvent(ClickOptions lable)
+{
+	// Adds a click event to the que that will be processed in HandleClickEvent()
+	clickEventQ.push_back(lable);
+}
+
 void System::HandleSFEvents()
 {
 	// Process SFML Events
@@ -69,30 +75,8 @@ void System::Update()
 {
 	// Menu test code
 	topMenu.Update();
-	if (topMenu.SelectChanged())
-	{
-		auto currentSelect = topMenu.GetCurrentSelect();
-		if (currentSelect.compare("Dijkstra's") == 0)
-		{
-			shape.setFillColor(sf::Color::Black);
-		}
-		else if (currentSelect.compare("A*") == 0)
-		{
-			shape.setFillColor(sf::Color::Cyan);
-		}
-		else if (currentSelect.compare("Breadth-First") == 0)
-		{
-			shape.setFillColor(sf::Color::Magenta);
-		}
-		else if (currentSelect.compare("Depth-First") == 0)
-		{
-			shape.setFillColor(sf::Color::Red);
-		}
-		else if (currentSelect.compare("Greedy") == 0)
-		{
-			shape.setFillColor(sf::Color::White);
-		}
-	}
+
+	HandleClickEvent();
 }
 
 void System::Render()
@@ -124,4 +108,33 @@ void System::LoadFonts()
 	{
 		std::cerr << "Font \"Dustismo_Roman.ttf\" could not be loaded" << std::endl;
 	}
+}
+
+void System::HandleClickEvent()
+{
+
+	for (auto& e : clickEventQ)
+	{
+		switch (e)
+		{
+		case ClickOptions::dijkstra:
+			shape.setFillColor(sf::Color::Yellow);
+			break;
+		case ClickOptions::a:
+			shape.setFillColor(sf::Color::Cyan);
+			break;
+		case ClickOptions::breadth:
+			shape.setFillColor(sf::Color::Magenta);
+			break;
+		case ClickOptions::depth:
+			shape.setFillColor(sf::Color::Red);
+			break;
+		case ClickOptions::greedy:
+			shape.setFillColor(sf::Color::White);
+			break;
+		default:
+			break;
+		}
+	}
+	clickEventQ.clear();
 }

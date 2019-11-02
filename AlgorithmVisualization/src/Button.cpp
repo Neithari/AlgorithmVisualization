@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Button.h"
+#include "System.h"
 
-Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::String& buttonText, std::shared_ptr<sf::Font> font, unsigned int fontSize)
+Button::Button(const ClickOptions lable, const sf::Vector2f& position, const sf::Vector2f& size, const sf::String& buttonText, std::shared_ptr<sf::Font> font, unsigned int fontSize)
 	:
-	lable(buttonText.toAnsiString()),
+	ClickableObject(lable),
 	font(font),
 	buttonText(buttonText, *this->font, fontSize),
 	shape(size),
@@ -27,15 +28,15 @@ Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf:
 	this->buttonText.setPosition(position.x + (buttonSize.x - textBounds.width) / 2 - textBounds.left, position.y + (buttonSize.y - textBounds.height) / 2 - textBounds.top);
 }
 
-void Button::Update(const sf::Vector2f& mousePosition)
+void Button::Update()
 {
-	currentState = ButtonStates::idle;
-	if (shape.getGlobalBounds().contains(mousePosition))
+	currentState = ClickableStates::idle;
+	if (shape.getGlobalBounds().contains(System::Instance().GetMousePosition()))
 	{
-		currentState = ButtonStates::hover;
+		currentState = ClickableStates::hover;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			currentState = ButtonStates::pressed;
+			currentState = ClickableStates::pressed;
 		}
 	}
 	CheckState();
@@ -47,35 +48,20 @@ void Button::Render(sf::RenderTarget& target) const
 	target.draw(buttonText);
 }
 
-const bool Button::IsPressed() const
+void Button::IdleState()
 {
-	return currentState == ButtonStates::pressed;
+	shape.setFillColor(idleColor);
+	shape.setOutlineColor(idleBorderColor);
 }
 
-const std::string Button::GetLabel() const
+void Button::HoverState()
 {
-	return lable;
+	shape.setFillColor(hoverColor);
+	shape.setOutlineColor(hoverBorderColor);
 }
 
-void Button::CheckState()
+void Button::PressedState()
 {
-	switch (currentState)
-	{
-	case ButtonStates::idle:
-		shape.setFillColor(idleColor);
-		shape.setOutlineColor(idleBorderColor);
-		break;
-	case ButtonStates::hover:
-		shape.setFillColor(hoverColor);
-		shape.setOutlineColor(hoverBorderColor);
-		break;
-	case ButtonStates::pressed:
-		shape.setFillColor(pressedColor);
-		shape.setOutlineColor(pressedBorderColor);
-		break;
-	default:
-		shape.setFillColor(sf::Color::Red);
-		shape.setOutlineColor(sf::Color::Red);
-		break;
-	}
+	shape.setFillColor(pressedColor);
+	shape.setOutlineColor(pressedBorderColor);
 }

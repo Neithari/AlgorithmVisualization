@@ -76,6 +76,9 @@ void System::Update()
 	// Menu test code
 	topMenu.Update();
 
+	// Test grid
+	grid.Update();
+
 	HandleClickEvent();
 }
 
@@ -134,6 +137,8 @@ void System::HandleClickEvent()
 			break;
 		case ClickOptions::greedy:
 			shape.setFillColor(sf::Color::White);
+			break;
+		case ClickOptions::node:
 			break;
 		default:
 			break;

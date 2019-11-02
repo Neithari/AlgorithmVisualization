@@ -5,7 +5,7 @@
 
 enum class ClickOptions
 {
-	dijkstra, a, breadth, depth, greedy
+	dijkstra, a, breadth, depth, greedy, node
 };
 
 class System

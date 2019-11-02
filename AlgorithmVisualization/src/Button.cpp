@@ -64,4 +64,6 @@ void Button::PressedState()
 {
 	shape.setFillColor(pressedColor);
 	shape.setOutlineColor(pressedBorderColor);
+
+	System::Instance().AddClickEvent(lable);
 }

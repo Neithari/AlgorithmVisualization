@@ -10,7 +10,7 @@ public:
 	void Render(sf::RenderTarget& target) const;
 
 private:
-	// Used that every child must implement their own state behavior
+	// State behavior
 	void IdleState();
 	void HoverState();
 	void PressedState();

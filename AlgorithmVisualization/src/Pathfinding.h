@@ -1,4 +1,5 @@
 #pragma once
+#include "Node.h"
 
 class Pathfinding
 {
@@ -17,5 +18,5 @@ private:
 	const float padding = 22.0f;
 	const float xOffset = 8.0f;
 	const float yOffset = 60.0f;
-	std::vector<sf::RectangleShape> grid;
+	std::vector<Node> grid;
 };

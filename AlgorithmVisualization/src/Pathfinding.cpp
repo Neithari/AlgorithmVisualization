@@ -8,13 +8,17 @@ Pathfinding::Pathfinding()
 
 void Pathfinding::Update()
 {
+	for (auto& node : grid)
+	{
+		node.Update();
+	}
 }
 
 void Pathfinding::Render(sf::RenderTarget& target) const
 {
-	for (const auto& g : grid)
+	for (const auto& node : grid)
 	{
-		target.draw(g);
+		node.Render(target);
 	}
 }
 
@@ -26,9 +30,9 @@ void Pathfinding::BuildGrid()
 	{
 		for (int x = 0; x < gridSizeX; x++)
 		{
-			sf::RectangleShape patch(patchSize);
-			patch.setPosition((float)x * padding + xOffset, (float)y * padding + yOffset);
-			grid.push_back(std::move(patch));
+			sf::Vector2f nodePosition((float)x * padding + xOffset, (float)y * padding + yOffset);
+			Node node(ClickOptions::node, nodePosition, Node::NodeType::field);
+			grid.push_back(std::move(node));
 		}
 	}
 }

@@ -18,7 +18,6 @@ void ClickableObject::CheckState()
 		break;
 	case ClickableStates::pressed:
 		PressedState();
-		System::Instance().AddClickEvent(lable);
 		break;
 	default:
 		std::cerr << "Something went wrong with the currentState";

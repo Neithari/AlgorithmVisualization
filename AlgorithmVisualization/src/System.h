@@ -1,6 +1,7 @@
 #pragma once
 #include "Menu.h"
 #include "ClickableObject.h"
+#include "Pathfinding.h"
 
 enum class ClickOptions
 {
@@ -63,6 +64,8 @@ private: // Private variables go in here
 
 	// Test shape
 	sf::CircleShape shape = sf::CircleShape(100.0f);
+	// Test pathfinding
+	Pathfinding grid;
 };
 
 // Clamp a position to the window. THIS WILL CHANGE THE GIVEN POSITION

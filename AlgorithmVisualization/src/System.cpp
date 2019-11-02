@@ -88,6 +88,9 @@ void System::Render()
 	window.draw(shape);
 	topMenu.Render(window);
 
+	// Test grid
+	grid.Render(window);
+
 	// Display rendered items
 	window.display();
 }

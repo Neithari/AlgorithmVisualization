@@ -13,10 +13,17 @@ protected:
 private:
 	void BuildGrid();
 private:
-	const int gridSizeX = 46;
-	const int gridSizeY = 32;
+	const size_t gridSizeX = 46;
+	const size_t gridSizeY = 32;
 	const float padding = 22.0f;
 	const float xOffset = 8.0f;
 	const float yOffset = 60.0f;
+
 	std::vector<Node> grid;
+
+	// Random number generation
+	// Get a seed from a random device, generate a pseudo random number with the seed and finaly put it into the fitting distribution
+	std::random_device seed;
+	std::mt19937 randomNumberGenerator;
+	std::uniform_int_distribution<size_t> gridDist;
 };

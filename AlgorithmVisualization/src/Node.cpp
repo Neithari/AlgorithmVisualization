@@ -5,17 +5,16 @@ Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type)
 	:
 	ClickableObject(lable),
 	type(type),
-	nodeSize(16.0f, 16.0f),
+	nodeSize(17.0f, 17.0f),
 	fieldColor(sf::Color::White),
 	wallColor(sf::Color::Red),
 	startColor(sf::Color::Green),
 	finishColor(sf::Color::Blue),
 	hoverColor(0, 179, 179),
-	nodeColor(GetColorForType()),
 	nodeShape(nodeSize)
 {
 	nodeShape.setOutlineThickness(2.0f);
-	nodeShape.setFillColor(nodeColor);
+	nodeShape.setFillColor(GetCurrentTypeColor());
 	nodeShape.setPosition(nodePosition);
 }
 
@@ -29,8 +28,40 @@ void Node::Render(sf::RenderTarget& target) const
 	target.draw(nodeShape);
 }
 
+void Node::SetNodeType(NodeType type)
+{
+	// Change nodeCost, color and type
+	switch (type)
+	{
+	case Node::NodeType::field:
+		nodeCost = 1;
+		nodeShape.setFillColor(fieldColor);
+		this->type = NodeType::field;
+		break;
+	case Node::NodeType::wall:
+		nodeCost = std::numeric_limits<int>::max();
+		nodeShape.setFillColor(wallColor);
+		this->type = NodeType::wall;
+		break;
+	case Node::NodeType::start:
+		nodeCost = 0;
+		nodeShape.setFillColor(startColor);
+		this->type = NodeType::start;
+		break;
+	case Node::NodeType::finish:
+		nodeCost = 0;
+		nodeShape.setFillColor(finishColor);
+		this->type = NodeType::finish;
+		break;
+	default:
+		std::cerr << "NodeType not declared!" << std::endl;
+		break;
+	}
+}
+
 void Node::IdleState()
 {
+	// Set the outline color back to the type color when idle
 	switch (type)
 	{
 	case Node::NodeType::field:
@@ -57,25 +88,18 @@ void Node::HoverState()
 
 void Node::PressedState()
 {
+	// If the pressed node is a field change it to a wall and vice versa
 	if (type == NodeType::field)
 	{
-		// Increase nodeCost to represent a wall, change the color and type to wall
-		nodeCost = 0;
-		nodeColor = wallColor;
-		nodeShape.setFillColor(nodeColor);
-		type = NodeType::wall;
+		SetNodeType(NodeType::wall);
 	}
 	else if (type == NodeType::wall)
 	{
-		// Increase nodeCost to represent a wall, change the color and type to wall
-		nodeCost = 1;
-		nodeColor = fieldColor;
-		nodeShape.setFillColor(nodeColor);
-		type = NodeType::field;
+		SetNodeType(NodeType::field);
 	}
 }
 
-sf::Color Node::GetColorForType()
+sf::Color Node::GetCurrentTypeColor() const
 {
 	// No need for break because we return the color
 	switch (type)

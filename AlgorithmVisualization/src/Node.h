@@ -14,13 +14,15 @@ public:
 	void Update();
 	void Render(sf::RenderTarget& target) const;
 
+	void SetNodeType(NodeType type);
+
 private:
 	// State behavior
 	void IdleState();
 	void HoverState();
 	void PressedState();
 
-	sf::Color GetColorForType();
+	sf::Color GetCurrentTypeColor() const;
 
 private:
 	// Basic colors
@@ -34,6 +36,5 @@ private:
 	NodeType type;
 	sf::Vector2f nodeSize;
 
-	sf::Color nodeColor;
 	sf::RectangleShape nodeShape;
 };

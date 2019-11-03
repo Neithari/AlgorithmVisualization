@@ -2,9 +2,6 @@
 #include "Pathfinding.h"
 
 Pathfinding::Pathfinding()
-	:
-	randomNumberGenerator(seed()),
-	gridDist(0, gridSizeX * gridSizeY)
 {
 	BuildGrid();
 }
@@ -23,6 +20,17 @@ void Pathfinding::Render(sf::RenderTarget& target) const
 	{
 		node->Render(target);
 	}
+}
+
+void Pathfinding::ResetGrid()
+{
+	// Set the whole grid to fields
+	for (auto& node : grid)
+	{
+		node->SetNodeType(Node::NodeType::field);
+	}
+	// Generate the start and finish nodes
+	GenerateStartFinish();
 }
 
 void Pathfinding::BuildGrid()
@@ -44,16 +52,7 @@ void Pathfinding::BuildGrid()
 	SetAdjacentNodes();
 
 	// Set two random nodes to start and finish
-	size_t start = gridDist(randomNumberGenerator);
-	size_t finish;
-	// Generate a new random number till we have different start and finish
-	do
-	{
-		finish = gridDist(randomNumberGenerator);
-	} while (start == finish);
-	// Set start and finish
-	grid.at(start)->SetNodeType(Node::NodeType::start);
-	grid.at(finish)->SetNodeType(Node::NodeType::finish);
+	GenerateStartFinish();
 }
 
 void Pathfinding::SetAdjacentNodes()
@@ -148,4 +147,25 @@ void Pathfinding::SetAdjacentNodes()
 			}
 		}
 	}
+}
+
+void Pathfinding::GenerateStartFinish()
+{
+	// Random number generation
+	// Get a seed from a random device, generate a pseudo random number with the seed and finaly put it into the fitting distribution
+	std::random_device seed;
+	std::mt19937 randomNumberGenerator(seed());
+	std::uniform_int_distribution<size_t> gridDist(0, gridSizeX * gridSizeY - 1);
+
+	// Set the start to a random node between 0 and 
+	size_t start = gridDist(randomNumberGenerator);
+	size_t finish;
+	// Generate a new random number till we have different start and finish
+	do
+	{
+		finish = gridDist(randomNumberGenerator);
+	} while (start == finish);
+	// Set start and finish
+	grid.at(start)->SetNodeType(Node::NodeType::start);
+	grid.at(finish)->SetNodeType(Node::NodeType::finish);
 }

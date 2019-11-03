@@ -25,7 +25,6 @@ private:
 	void PressedState();
 
 	sf::Color GetCurrentTypeColor() const;
-	void TestAdjacentNodes();
 
 private:
 	// Basic colors

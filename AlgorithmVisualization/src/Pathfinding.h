@@ -9,11 +9,15 @@ public:
 
 	void Update();
 	void Render(sf::RenderTarget& target) const;
-protected:
+
+	void ResetGrid();
+
 private:
 	void BuildGrid();
 	// Go over every node in the grid and set it's neighbours
 	void SetAdjacentNodes();
+	// Generate the start and finish nodes
+	void GenerateStartFinish();
 
 private:
 	const size_t gridSizeX = 46;
@@ -23,10 +27,4 @@ private:
 	const float yOffset = 60.0f;
 
 	std::vector<std::shared_ptr<Node>> grid;
-
-	// Random number generation
-	// Get a seed from a random device, generate a pseudo random number with the seed and finaly put it into the fitting distribution
-	std::random_device seed;
-	std::mt19937 randomNumberGenerator;
-	std::uniform_int_distribution<size_t> gridDist;
 };

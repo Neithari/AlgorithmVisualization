@@ -99,7 +99,6 @@ void Node::HoverState()
 
 void Node::PressedState()
 {
-	TestAdjacentNodes();
 	// If the pressed node is a field change it to a wall and vice versa
 	if (type == NodeType::field)
 	{
@@ -126,13 +125,5 @@ sf::Color Node::GetCurrentTypeColor() const
 		return finishColor;
 	default:
 		return sf::Color::Magenta;
-	}
-}
-
-void Node::TestAdjacentNodes()
-{
-	for (auto& node : adjacentNodes)
-	{
-		node->nodeShape.setFillColor(sf::Color::Blue);
 	}
 }

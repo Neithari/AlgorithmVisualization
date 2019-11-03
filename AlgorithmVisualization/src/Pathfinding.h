@@ -12,6 +12,9 @@ public:
 protected:
 private:
 	void BuildGrid();
+	// Go over every node in the grid and set it's neighbours
+	void SetAdjacentNodes();
+
 private:
 	const size_t gridSizeX = 46;
 	const size_t gridSizeY = 32;
@@ -19,7 +22,7 @@ private:
 	const float xOffset = 8.0f;
 	const float yOffset = 60.0f;
 
-	std::vector<Node> grid;
+	std::vector<std::shared_ptr<Node>> grid;
 
 	// Random number generation
 	// Get a seed from a random device, generate a pseudo random number with the seed and finaly put it into the fitting distribution

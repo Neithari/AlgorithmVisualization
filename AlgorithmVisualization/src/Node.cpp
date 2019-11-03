@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Node.h"
 
-Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type)
+Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type, std::pair<int, int> gridCoordinates)
 	:
 	ClickableObject(lable),
 	type(type),
@@ -11,7 +11,8 @@ Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type)
 	startColor(sf::Color::Green),
 	finishColor(sf::Color::Blue),
 	hoverColor(0, 179, 179),
-	nodeShape(nodeSize)
+	nodeShape(nodeSize),
+	coords(gridCoordinates)
 {
 	nodeShape.setOutlineThickness(2.0f);
 	nodeShape.setFillColor(GetCurrentTypeColor());
@@ -59,6 +60,16 @@ void Node::SetNodeType(NodeType type)
 	}
 }
 
+const std::pair<int, int>& Node::GetGridCoords() const
+{
+	return coords;
+}
+
+void Node::AddAdjacentNode(std::shared_ptr<Node> node)
+{
+	adjacentNodes.push_back(node);
+}
+
 void Node::IdleState()
 {
 	// Set the outline color back to the type color when idle
@@ -88,6 +99,7 @@ void Node::HoverState()
 
 void Node::PressedState()
 {
+	TestAdjacentNodes();
 	// If the pressed node is a field change it to a wall and vice versa
 	if (type == NodeType::field)
 	{
@@ -114,5 +126,13 @@ sf::Color Node::GetCurrentTypeColor() const
 		return finishColor;
 	default:
 		return sf::Color::Magenta;
+	}
+}
+
+void Node::TestAdjacentNodes()
+{
+	for (auto& node : adjacentNodes)
+	{
+		node->nodeShape.setFillColor(sf::Color::Blue);
 	}
 }

@@ -9,12 +9,14 @@ public:
 		field, wall, start, finish
 	};
 public:
-	Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type);
+	Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type, std::pair<int, int> gridCoordinates);
 
 	void Update();
 	void Render(sf::RenderTarget& target) const;
 
 	void SetNodeType(NodeType type);
+	const std::pair<int, int>& GetGridCoords() const;
+	void AddAdjacentNode(std::shared_ptr<Node> node);
 
 private:
 	// State behavior
@@ -23,6 +25,7 @@ private:
 	void PressedState();
 
 	sf::Color GetCurrentTypeColor() const;
+	void TestAdjacentNodes();
 
 private:
 	// Basic colors
@@ -32,9 +35,13 @@ private:
 	const sf::Color finishColor;
 	const sf::Color hoverColor;
 
-	int nodeCost;
 	NodeType type;
 	sf::Vector2f nodeSize;
-
 	sf::RectangleShape nodeShape;
+	// Coordinates inside the grid
+	std::pair<int, int> coords;
+
+	// For pathfinding
+	int nodeCost;
+	std::vector<std::shared_ptr<Node>> adjacentNodes;
 };

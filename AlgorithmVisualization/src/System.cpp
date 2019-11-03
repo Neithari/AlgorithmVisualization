@@ -15,13 +15,6 @@ System::System(const int windowWidth, const int windowHeight)
 	topMenu(FontDustismoRoman)
 {
 	LoadFonts();
-
-	// Create buttons in topMenu
-	topMenu.CreateButton(ClickOptions::dijkstra, "Dijkstra's");
-	topMenu.CreateButton(ClickOptions::a, "A*");
-	topMenu.CreateButton(ClickOptions::breadth, "Breadth-First");
-	topMenu.CreateButton(ClickOptions::depth, "Depth-First");
-	topMenu.CreateButton(ClickOptions::greedy, "Greedy");
 }
 
 void System::Run()
@@ -73,10 +66,10 @@ void System::HandleSFEvents()
 
 void System::Update()
 {
-	// Menu test code
+	// TopMenu
 	topMenu.Update();
 
-	// Test grid
+	// Grid
 	grid.Update();
 
 	HandleClickEvent();
@@ -90,8 +83,6 @@ void System::Render()
 	// render everything
 	window.draw(shape);
 	topMenu.Render(window);
-
-	// Test grid
 	grid.Render(window);
 
 	// Display rendered items
@@ -100,6 +91,14 @@ void System::Render()
 
 void System::SetupEverything()
 {
+	// Create buttons in topMenu
+	topMenu.CreateButton(ClickOptions::reset, "Reset Grid");
+	topMenu.CreateButton(ClickOptions::dijkstra, "Dijkstra's");
+	topMenu.CreateButton(ClickOptions::a, "A*");
+	topMenu.CreateButton(ClickOptions::breadth, "Breadth-First");
+	topMenu.CreateButton(ClickOptions::depth, "Depth-First");
+	topMenu.CreateButton(ClickOptions::greedy, "Greedy");
+
 	// Test shape
 	shape.setFillColor(sf::Color::Green);
 }
@@ -138,7 +137,8 @@ void System::HandleClickEvent()
 		case ClickOptions::greedy:
 			shape.setFillColor(sf::Color::White);
 			break;
-		case ClickOptions::node:
+		case ClickOptions::reset:
+			grid.ResetGrid();
 			break;
 		default:
 			break;

@@ -100,7 +100,7 @@ void System::SetupEverything()
 	topMenu.CreateButton(ClickOptions::greedy, "Greedy");
 
 	// Test shape
-	shape.setFillColor(sf::Color::Green);
+	shape.setFillColor(sf::Color::Black);
 }
 
 void System::LoadFonts()
@@ -123,7 +123,7 @@ void System::HandleClickEvent()
 		switch (e)
 		{
 		case ClickOptions::dijkstra:
-			shape.setFillColor(sf::Color::Yellow);
+			grid.Dijkstra();
 			break;
 		case ClickOptions::a:
 			shape.setFillColor(sf::Color::Cyan);

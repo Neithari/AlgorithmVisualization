@@ -11,6 +11,7 @@ Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type, std::pa
 	startColor(sf::Color::Green),
 	finishColor(sf::Color::Blue),
 	hoverColor(0, 179, 179),
+	pathColor(sf::Color::Yellow),
 	nodeShape(nodeSize),
 	coords(gridCoordinates)
 {
@@ -27,6 +28,16 @@ void Node::Update()
 void Node::Render(sf::RenderTarget& target) const
 {
 	target.draw(nodeShape);
+}
+
+void Node::ResetNode()
+{
+	// Reset distance to infinite
+	distance = std::numeric_limits<int>::max();
+	// Set node to field
+	SetNodeType(NodeType::field);
+	// Set node to not finalized
+	finalized = false;
 }
 
 void Node::SetNodeType(NodeType type)
@@ -48,11 +59,20 @@ void Node::SetNodeType(NodeType type)
 		nodeCost = 0;
 		nodeShape.setFillColor(startColor);
 		this->type = NodeType::start;
+		// Set distance to 0 because we are already there
+		distance = 0;
 		break;
 	case Node::NodeType::finish:
-		nodeCost = 0;
+		nodeCost = 1;
 		nodeShape.setFillColor(finishColor);
 		this->type = NodeType::finish;
+		break;
+	case Node::NodeType::path:
+		if (this->type != NodeType::start && this->type != NodeType::finish)
+		{
+			nodeShape.setFillColor(pathColor);
+			this->type = NodeType::path;
+		}
 		break;
 	default:
 		std::cerr << "NodeType not declared!" << std::endl;
@@ -68,6 +88,54 @@ const std::pair<int, int>& Node::GetGridCoords() const
 void Node::AddAdjacentNode(std::shared_ptr<Node> node)
 {
 	adjacentNodes.push_back(node);
+}
+
+const int Node::GetDistance() const
+{
+	return distance;
+}
+
+const int Node::GetNodeCost() const
+{
+	return nodeCost;
+}
+
+const bool Node::IsFinalized() const
+{
+	return finalized;
+}
+
+void Node::Finalize()
+{
+	finalized = true;
+}
+
+std::vector<std::shared_ptr<Node>>& Node::GetAdjacentNodes()
+{
+	return adjacentNodes;
+}
+
+void Node::SetDistance(int distance)
+{
+	// Set the distance to "infinite" if the node is a wall
+	if (type == NodeType::wall)
+	{
+		this->distance = std::numeric_limits<int>::max();
+	}
+	else
+	{
+		this->distance = distance;
+	}
+}
+
+void Node::SetParent(std::shared_ptr<Node> parent)
+{
+	parentNode = parent;
+}
+
+std::shared_ptr<Node> Node::GetParent()
+{
+	return parentNode;
 }
 
 void Node::IdleState()

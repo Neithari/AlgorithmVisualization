@@ -27,10 +27,73 @@ void Pathfinding::ResetGrid()
 	// Set the whole grid to fields
 	for (auto& node : grid)
 	{
-		node->SetNodeType(Node::NodeType::field);
+		node->ResetNode();
 	}
 	// Generate the start and finish nodes
 	GenerateStartFinish();
+}
+
+void Pathfinding::Dijkstra()
+{
+	/// TODO: Wenn blockiert dann muss abgebrochen werden!!!!!!!!
+	std::shared_ptr<Node> currentNode = startNode;
+	std::shared_ptr<Node> shortestNode;
+	std::vector<std::shared_ptr<Node>> finalizedNodes;
+	int currentDistance = std::numeric_limits<int>::max();
+	bool allExplored = false;
+	// Reserve enough space in the finalized nodes
+	finalizedNodes.reserve(grid.size());
+	
+	do
+	{		
+		allExplored = true;
+		// Iterate over all nodes in the grid to find the one with the lowest distance
+		for (auto& node : grid)
+		{
+			// Pick the first node with the lowest distance that's not finalized yet
+			if (node->GetDistance() < currentDistance && !node->IsFinalized())
+			{
+				// Set the currentDistance to the nodes distance to only get nodes with less distance in the following iterations
+				currentDistance = node->GetDistance();
+				// Set the shortestNode to the current node
+				shortestNode = node;
+				allExplored = false;
+			}
+		}
+
+		// Update all distances to adjacent nodes of the node with the shortest distance
+		auto adjacentNodes = shortestNode->GetAdjacentNodes();
+		int minAdjacentDistance = std::numeric_limits<int>::max();
+		for (auto& adjacentNode : adjacentNodes)
+		{
+			// Set the distance of the adjacent node to the distance of the current node + the cost to get to the adjacent node if the adjacent node is not finalized
+			if (!adjacentNode->IsFinalized())
+			{
+				int newDistance = shortestNode->GetDistance() + adjacentNode->GetNodeCost();
+				if (newDistance < adjacentNode->GetDistance())
+				{
+					adjacentNode->SetDistance(newDistance);
+					adjacentNode->SetParent(shortestNode);
+				}
+			}
+		}
+		// Finalize the node with the lowest distance and add it to the finalized nodes
+		shortestNode->Finalize();
+		finalizedNodes.push_back(shortestNode);
+
+		// Set the currentNode to shortestNode
+		currentNode = shortestNode;
+		// Set the current distance to be the distance of the shortest node + two steps
+		currentDistance = shortestNode->GetDistance() + 2 * finishNode->GetNodeCost();
+	} while (!allExplored);	
+
+	// Draw path by tracing parents back from finish to start
+	auto parent = finishNode->GetParent();
+	do
+	{
+		parent->SetNodeType(Node::NodeType::path);
+		parent = parent->GetParent();
+	} while (parent->GetGridCoords() != startNode->GetGridCoords());
 }
 
 void Pathfinding::BuildGrid()
@@ -165,7 +228,11 @@ void Pathfinding::GenerateStartFinish()
 	{
 		finish = gridDist(randomNumberGenerator);
 	} while (start == finish);
-	// Set start and finish
+
+	// Set start and finish NodeTypes
 	grid.at(start)->SetNodeType(Node::NodeType::start);
 	grid.at(finish)->SetNodeType(Node::NodeType::finish);
+	// Save start and finish nodes for easy access
+	startNode = grid.at(start);
+	finishNode = grid.at(finish);
 }

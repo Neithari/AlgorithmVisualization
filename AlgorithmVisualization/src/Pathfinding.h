@@ -21,6 +21,8 @@ private:
 	void SetAdjacentNodes();
 	// Generate the start and finish nodes
 	void GenerateStartFinish();
+	// Draw path from finish to start
+	void DrawPath();
 
 private:
 	const size_t gridSizeX = 46;

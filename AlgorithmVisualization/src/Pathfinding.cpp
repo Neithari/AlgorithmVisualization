@@ -42,13 +42,11 @@ void Pathfinding::Dijkstra()
 	ResetGrid(false);
 
 	std::shared_ptr<Node> shortestNode;
-	bool allExplored = false;
 	
 	do
 	{
 		int currentDistance = std::numeric_limits<int>::max();
-		// Set allExplored to true here and set it back to falls if there is still a shorter node
-		allExplored = true;
+
 		// Iterate over all nodes in the grid to find the one with the lowest distance
 		for (auto& node : grid)
 		{
@@ -59,9 +57,10 @@ void Pathfinding::Dijkstra()
 				currentDistance = node->GetDistance();
 				// Set the shortestNode to the current node
 				shortestNode = node;
-				allExplored = false;
 			}
 		}
+		// Color the shortestNode in shortestColor
+		shortestNode->ColorShortestOrAdjacent(true);
 
 		// Update all distances to adjacent nodes of the node with the shortest distance and set the shortestNode as parent for them
 		// if they are not finalized yet and if there is no shorter path.
@@ -75,13 +74,19 @@ void Pathfinding::Dijkstra()
 
 			if (!adjacentNode->IsFinalized() && newDistance < adjacentNode->GetDistance())
 			{
+				// Color the adjacentNode in adjacentColor
+				adjacentNode->ColorShortestOrAdjacent(false);
+
 				adjacentNode->SetDistance(newDistance);
 				adjacentNode->SetParent(shortestNode);
 			}
 		}
 		// Finalize the node with the lowest distance
 		shortestNode->Finalize();
-	} while (!allExplored);	
+
+		// Sleep for some time to make the visualization better
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	} while (shortestNode != finishNode);
 
 	// Draw path by tracing parents back from finish to start
 	DrawPath();
@@ -224,6 +229,9 @@ void Pathfinding::GenerateStartFinish()
 	grid.at(start)->SetNodeType(Node::NodeType::start);
 	grid.at(finish)->SetNodeType(Node::NodeType::finish);
 	// Save start and finish nodes for easy access
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	startNode = grid.at(start);
 	finishNode = grid.at(finish);
 }

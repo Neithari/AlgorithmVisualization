@@ -30,6 +30,9 @@ public:
 	void SetDistance(int distance);
 	void SetParent(std::shared_ptr<Node> parent);
 	std::shared_ptr<Node> GetParent();
+	// For visualization
+	// Color the node in shortestColor if true or in adjacentColor if false
+	void ColorShortestOrAdjacent(bool shortest);
 
 private:
 	// State behavior
@@ -47,10 +50,13 @@ private:
 	const sf::Color finishColor;
 	const sf::Color hoverColor;
 	const sf::Color pathColor;
-
+	const sf::Color shortestColor;
+	const sf::Color adjacentColor;
+	
 	NodeType type;
 	sf::Vector2f nodeSize;
 	sf::RectangleShape nodeShape;
+	sf::Color currentColor;
 	// Coordinates inside the grid
 	std::pair<int, int> coords;
 

@@ -12,26 +12,40 @@ Node::Node(ClickOptions lable, sf::Vector2f nodePosition, NodeType type, std::pa
 	finishColor(sf::Color::Blue),
 	hoverColor(0, 179, 179),
 	pathColor(sf::Color::Yellow),
+	shortestColor(194, 153, 255),
+	adjacentColor(102, 0, 255),
 	nodeShape(nodeSize),
+	currentColor(GetCurrentTypeColor()),
 	coords(gridCoordinates)
 {
 	nodeShape.setOutlineThickness(2.0f);
-	nodeShape.setFillColor(GetCurrentTypeColor());
+	nodeShape.setFillColor(currentColor);
 	nodeShape.setPosition(nodePosition);
 }
 
 void Node::Update()
 {
+	// Check for interaction
 	CheckInteraction(nodeShape);
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+	// Update the nodeShape color to the current color
+	nodeShape.setFillColor(currentColor);
 }
 
 void Node::Render(sf::RenderTarget& target) const
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	target.draw(nodeShape);
 }
 
 void Node::ResetNode(bool resetSpecial)
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	// If we dont want to reset walls, start and finish then...
 	if (!resetSpecial)
 	{
@@ -58,39 +72,44 @@ void Node::ResetNode(bool resetSpecial)
 	}
 	// Set node to not finalized
 	finalized = false;
+	// Set current color back to NodeType color
+	currentColor = GetCurrentTypeColor();
 }
 
 void Node::SetNodeType(NodeType type)
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	// Change nodeCost, color and type
 	switch (type)
 	{
 	case Node::NodeType::field:
 		nodeCost = 1;
-		nodeShape.setFillColor(fieldColor);
+		currentColor = fieldColor;
 		this->type = NodeType::field;
 		break;
 	case Node::NodeType::wall:
 		nodeCost = std::numeric_limits<int>::max();
-		nodeShape.setFillColor(wallColor);
+		currentColor = wallColor;
 		this->type = NodeType::wall;
 		break;
 	case Node::NodeType::start:
 		nodeCost = 0;
-		nodeShape.setFillColor(startColor);
+		currentColor = startColor;
 		this->type = NodeType::start;
 		// Set distance to 0 because we are already there
 		distance = 0;
 		break;
 	case Node::NodeType::finish:
 		nodeCost = 1;
-		nodeShape.setFillColor(finishColor);
+		currentColor = finishColor;
 		this->type = NodeType::finish;
 		break;
 	case Node::NodeType::path:
 		if (this->type != NodeType::start && this->type != NodeType::finish)
 		{
-			nodeShape.setFillColor(pathColor);
+			currentColor = pathColor;
 			this->type = NodeType::path;
 		}
 		break;
@@ -98,6 +117,7 @@ void Node::SetNodeType(NodeType type)
 		std::cerr << "NodeType not declared!" << std::endl;
 		break;
 	}
+	nodeShape.setFillColor(currentColor);
 }
 
 const std::pair<int, int>& Node::GetGridCoords() const
@@ -107,6 +127,8 @@ const std::pair<int, int>& Node::GetGridCoords() const
 
 void Node::AddAdjacentNode(std::shared_ptr<Node> node)
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	adjacentNodes.push_back(node);
 }
 
@@ -127,6 +149,9 @@ const bool Node::IsFinalized() const
 
 void Node::Finalize()
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	finalized = true;
 }
 
@@ -137,6 +162,9 @@ std::vector<std::shared_ptr<Node>>& Node::GetAdjacentNodes()
 
 void Node::SetDistance(int distance)
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	// Set the distance to "infinite" if the node is a wall
 	if (type == NodeType::wall)
 	{
@@ -150,6 +178,9 @@ void Node::SetDistance(int distance)
 
 void Node::SetParent(std::shared_ptr<Node> parent)
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	parentNode = parent;
 }
 
@@ -158,8 +189,26 @@ std::shared_ptr<Node> Node::GetParent()
 	return parentNode;
 }
 
+void Node::ColorShortestOrAdjacent(bool shortest)
+{
+	if (type != NodeType::start && type != NodeType::finish)
+	{
+		if (shortest)
+		{
+			currentColor = shortestColor;
+		}
+		else
+		{
+			currentColor = adjacentColor;
+		}
+	}
+}
+
 void Node::IdleState()
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	// Set the outline color back to the type color when idle
 	switch (type)
 	{
@@ -175,6 +224,9 @@ void Node::IdleState()
 	case Node::NodeType::finish:
 		nodeShape.setOutlineColor(finishColor);
 		break;
+	case Node::NodeType::path:
+		nodeShape.setOutlineColor(pathColor);
+		break;
 	default:
 		break;
 	}
@@ -182,13 +234,19 @@ void Node::IdleState()
 
 void Node::HoverState()
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	nodeShape.setOutlineColor(hoverColor);
 }
 
 void Node::PressedState()
 {
-	// If the pressed node is a field change it to a wall and vice versa
-	if (type == NodeType::field)
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
+	// If the pressed node is a field or a path change it to a wall and vice versa
+	if (type == NodeType::field || type == NodeType::path)
 	{
 		SetNodeType(NodeType::wall);
 	}

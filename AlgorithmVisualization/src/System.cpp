@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "System.h"
 
+// Definition of mutex
+std::recursive_mutex mtx;
 // Used to ensure only one system is present at any time and the instance is globally accessible.
 System System::instance;
 
@@ -123,7 +125,8 @@ void System::HandleClickEvent()
 		switch (e)
 		{
 		case ClickOptions::dijkstra:
-			grid.Dijkstra();
+			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::Dijkstra, &grid));
+			//grid.Dijkstra();
 			break;
 		case ClickOptions::a:
 			shape.setFillColor(sf::Color::Cyan);

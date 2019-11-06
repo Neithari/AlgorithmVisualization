@@ -3,6 +3,9 @@
 #include "ClickableObject.h"
 #include "Pathfinding.h"
 
+// Lock for threading
+extern std::recursive_mutex mtx;
+
 enum class ClickOptions
 {
 	dijkstra, a, breadth, depth, greedy, node, reset
@@ -58,13 +61,15 @@ private: // Private variables go in here
 	std::shared_ptr<sf::Font> FontDustismoRoman = std::make_shared<sf::Font>();
 	// Vector to store every click event for processing
 	std::vector<ClickOptions> clickEventQ;
+	// Vector of futures for std::async
+	std::vector<std::future<void>> algorithmFutures;
 
 	// Create menu
 	Menu topMenu;
 
 	// Test shape
 	sf::CircleShape shape = sf::CircleShape(100.0f);
-	// Test pathfinding
+	// Pathfinding
 	Pathfinding grid;
 };
 

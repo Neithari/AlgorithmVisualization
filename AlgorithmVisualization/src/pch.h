@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+#include <future>
 #include <mutex>
 #include <chrono>
 #include <cassert>

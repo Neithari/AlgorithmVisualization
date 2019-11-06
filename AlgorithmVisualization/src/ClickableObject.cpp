@@ -8,6 +8,9 @@ ClickableObject::ClickableObject(ClickOptions lable) : lable(lable)
 
 void ClickableObject::CheckInteraction(sf::Shape& shape)
 {
+	// Lock mutex
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
 	currentState = ClickableStates::idle;
 	if (shape.getGlobalBounds().contains(System::Instance().GetMousePosition()))
 	{

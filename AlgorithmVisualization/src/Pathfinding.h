@@ -10,7 +10,8 @@ public:
 	void Update();
 	void Render(sf::RenderTarget& target) const;
 
-	void ResetGrid();
+	// If resetSpecial is false don't reset walls, start and finish.
+	void ResetGrid(bool resetSpecial = true);
 
 	void Dijkstra();
 

@@ -22,19 +22,25 @@ void Pathfinding::Render(sf::RenderTarget& target) const
 	}
 }
 
-void Pathfinding::ResetGrid()
+void Pathfinding::ResetGrid(bool resetSpecial)
 {
 	// Set the whole grid to fields
 	for (auto& node : grid)
 	{
-		node->ResetNode();
+		node->ResetNode(resetSpecial);
 	}
-	// Generate the start and finish nodes
-	GenerateStartFinish();
+	// Generate new start and finish nodes if we reset the specials
+	if (resetSpecial)
+	{
+		GenerateStartFinish();
+	}
 }
 
 void Pathfinding::Dijkstra()
 {
+	// Reset a possible path back to fields, reset the distance and make everything not finalized
+	ResetGrid(false);
+
 	std::shared_ptr<Node> shortestNode;
 	bool allExplored = false;
 	

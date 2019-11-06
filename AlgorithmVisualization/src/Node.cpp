@@ -30,12 +30,32 @@ void Node::Render(sf::RenderTarget& target) const
 	target.draw(nodeShape);
 }
 
-void Node::ResetNode()
+void Node::ResetNode(bool resetSpecial)
 {
-	// Reset distance to infinite
-	distance = std::numeric_limits<int>::max();
-	// Set node to field
-	SetNodeType(NodeType::field);
+	// If we dont want to reset walls, start and finish then...
+	if (!resetSpecial)
+	{
+		// ...reset the path to be a field...
+		if (type == NodeType::path)
+		{
+			// Set node to field
+			SetNodeType(NodeType::field);
+		}
+		// ...and reset the distance of everything exept the start to infinite.
+		if (type != NodeType::start)
+		{
+			// Reset distance to infinite
+			distance = std::numeric_limits<int>::max();
+		}
+	}
+	// If we want to reset everything then...
+	else
+	{
+		// ...set node to field...
+		SetNodeType(NodeType::field);
+		// ...and reset distance to infinite.
+		distance = std::numeric_limits<int>::max();
+	}
 	// Set node to not finalized
 	finalized = false;
 }

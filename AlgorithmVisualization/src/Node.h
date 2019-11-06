@@ -13,8 +13,8 @@ public:
 
 	void Update();
 	void Render(sf::RenderTarget& target) const;
-
-	void ResetNode();
+	// If resetSpecial is false reset no walls, start and finish.
+	void ResetNode(bool resetSpecial = true);
 	void SetNodeType(NodeType type);
 	const std::pair<int, int>& GetGridCoords() const;
 	void AddAdjacentNode(std::shared_ptr<Node> node);

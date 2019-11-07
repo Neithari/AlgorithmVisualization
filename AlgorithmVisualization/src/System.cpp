@@ -16,6 +16,8 @@ System::System(const int windowWidth, const int windowHeight)
 	window(sf::VideoMode(windowWidth, windowHeight), "Algorithm Visualisation"),
 	topMenu(FontDustismoRoman)
 {
+	// Set the backgroundcolor
+
 	LoadFonts();
 }
 
@@ -80,10 +82,9 @@ void System::Update()
 void System::Render()
 {
 	// Clear window
-	window.clear();
+	window.clear(backgroundColor);
 
 	// render everything
-	window.draw(shape);
 	topMenu.Render(window);
 	grid.Render(window);
 
@@ -100,9 +101,6 @@ void System::SetupEverything()
 	topMenu.CreateButton(ClickOptions::breadth, "Breadth-First");
 	topMenu.CreateButton(ClickOptions::depth, "Depth-First");
 	topMenu.CreateButton(ClickOptions::greedy, "Greedy");
-
-	// Test shape
-	shape.setFillColor(sf::Color::Black);
 }
 
 void System::LoadFonts()
@@ -126,19 +124,15 @@ void System::HandleClickEvent()
 		{
 		case ClickOptions::dijkstra:
 			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::Dijkstra, &grid));
-			//grid.Dijkstra();
 			break;
 		case ClickOptions::a:
-			shape.setFillColor(sf::Color::Cyan);
+			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::AStar, &grid));
 			break;
 		case ClickOptions::breadth:
-			shape.setFillColor(sf::Color::Magenta);
 			break;
 		case ClickOptions::depth:
-			shape.setFillColor(sf::Color::Red);
 			break;
 		case ClickOptions::greedy:
-			shape.setFillColor(sf::Color::White);
 			break;
 		case ClickOptions::reset:
 			grid.ResetGrid();

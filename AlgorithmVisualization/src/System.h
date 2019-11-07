@@ -50,6 +50,8 @@ public: // Public variables go in here
 	const int windowHeight;
 
 private: // Private variables go in here
+	const sf::Color backgroundColor{ 51, 51, 51 };
+
 	// Used to ensure only one system is present at any time
 	static System instance;
 	// Used to ensure Run() is only run once
@@ -67,8 +69,6 @@ private: // Private variables go in here
 	// Create menu
 	Menu topMenu;
 
-	// Test shape
-	sf::CircleShape shape = sf::CircleShape(100.0f);
 	// Pathfinding
 	Pathfinding grid;
 };

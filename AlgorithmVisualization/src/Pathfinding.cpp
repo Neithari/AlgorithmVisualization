@@ -257,7 +257,7 @@ void Pathfinding::GenerateStartFinish()
 	{
 		finish = gridDist(randomNumberGenerator);
 	} while (start == finish);
-	
+
 	// Set start and finish NodeTypes
 	grid.at(start)->SetNodeType(Node::NodeType::start);
 	grid.at(finish)->SetNodeType(Node::NodeType::finish);

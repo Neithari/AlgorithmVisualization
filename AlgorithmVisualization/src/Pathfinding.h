@@ -13,8 +13,9 @@ public:
 	// If resetSpecial is false don't reset walls, start and finish.
 	void ResetGrid(bool resetSpecial = true);
 
+	// Pathfinding algorithms
 	void Dijkstra();
-
+	void AStar();
 
 private:
 	void BuildGrid();
@@ -22,6 +23,8 @@ private:
 	void SetAdjacentNodes();
 	// Generate the start and finish nodes
 	void GenerateStartFinish();
+	// Update the distance of all adjacent nodes of the given node
+	void UpdateAdjacentDistances(std::shared_ptr<Node> node);
 	// Draw path from finish to start
 	void DrawPath();
 
@@ -32,6 +35,9 @@ private:
 	const float padding = 22.0f;
 	const float xOffset = 8.0f;
 	const float yOffset = 60.0f;
+	
+	// Animation delay time in milliseconds
+	const int delayTime = 20;
 
 	std::vector<std::shared_ptr<Node>> grid;
 	// Remember start and finish for pathfinding

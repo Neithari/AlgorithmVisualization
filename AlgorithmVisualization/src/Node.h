@@ -33,6 +33,8 @@ public:
 	// For visualization
 	// Color the node in shortestColor if true or in adjacentColor if false
 	void ColorShortestOrAdjacent(bool shortest);
+	// Estimate the distance to the given object
+	int EstimateDistanceTo(const Node& target) const;
 
 private:
 	// State behavior

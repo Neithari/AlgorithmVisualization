@@ -204,6 +204,29 @@ void Node::ColorShortestOrAdjacent(bool shortest)
 	}
 }
 
+int Node::EstimateDistanceTo(const Node& target) const
+{
+	// Get the grid coordinates of the target
+	auto targetCoords = target.GetGridCoords();
+	// Set xDistance to the target x - this node x
+	int xDistance = targetCoords.first - coords.first;
+	// Set yDistance to the target y - this node y
+	int yDistance = targetCoords.second - coords.second;
+
+	// If x or y distance are negative make it positive so we always get a positive estimateDistance
+	if (xDistance < 0)
+	{
+		xDistance = -xDistance;
+	}
+	if (yDistance < 0)
+	{
+		yDistance = -yDistance;
+	}
+
+	// Return the estimate distance that is a combined x and y distance
+	return xDistance + yDistance;
+}
+
 void Node::IdleState()
 {
 	// Lock mutex

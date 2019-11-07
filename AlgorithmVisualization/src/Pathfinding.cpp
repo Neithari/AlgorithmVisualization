@@ -64,28 +64,61 @@ void Pathfinding::Dijkstra()
 
 		// Update all distances to adjacent nodes of the node with the shortest distance and set the shortestNode as parent for them
 		// if they are not finalized yet and if there is no shorter path.
-		auto adjacentNodes = shortestNode->GetAdjacentNodes();
-		int minAdjacentDistance = std::numeric_limits<int>::max();
-		for (auto& adjacentNode : adjacentNodes)
-		{
-			// Set the distance of the adjacent node to the distance of the current node + the cost to get to the adjacent node if the adjacent node is not finalized
-			// and the new distance is shorter than the current distance
-			int newDistance = shortestNode->GetDistance() + adjacentNode->GetNodeCost();
+		UpdateAdjacentDistances(shortestNode);
 
-			if (!adjacentNode->IsFinalized() && newDistance < adjacentNode->GetDistance())
-			{
-				// Color the adjacentNode in adjacentColor
-				adjacentNode->ColorShortestOrAdjacent(false);
-
-				adjacentNode->SetDistance(newDistance);
-				adjacentNode->SetParent(shortestNode);
-			}
-		}
 		// Finalize the node with the lowest distance
 		shortestNode->Finalize();
 
 		// Sleep for some time to make the visualization better
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(delayTime));
+	} while (shortestNode != finishNode);
+
+	// Draw path by tracing parents back from finish to start
+	DrawPath();
+}
+
+void Pathfinding::AStar()
+{
+	// Reset a possible path back to fields, reset the distance and make everything not finalized
+	ResetGrid(false);
+
+	std::shared_ptr<Node> shortestNode;
+
+	do
+	{
+		int currentDistance = std::numeric_limits<int>::max();
+
+		// Iterate over all nodes in the grid to find the one with the lowest combined distance of distance and estimate distance
+		for (auto& node : grid)
+		{
+			// Initialize the combinedDistance to the node distance + the estimate distance to our finish node
+			int combinedDistance = node->GetDistance() + node->EstimateDistanceTo(*finishNode);
+			// If the nodes distance is infinite we get a negative combinedDistance, so we need to set it to infinite.
+			if (combinedDistance < 0)
+			{
+				combinedDistance = std::numeric_limits<int>::max();
+			}
+			// Pick the first node with the lowest distance that's not finalized yet
+			if (combinedDistance < currentDistance && !node->IsFinalized())
+			{
+				// Set the currentDistance to the combined distance to only get nodes with less combined distance in the following iterations
+				currentDistance = combinedDistance;
+				// Set the shortestNode to the current node
+				shortestNode = node;
+			}
+		}
+		// Color the shortestNode in shortestColor
+		shortestNode->ColorShortestOrAdjacent(true);
+
+		// Update all distances to adjacent nodes of the node with the shortest distance and set the shortestNode as parent for them
+		// if they are not finalized yet and if there is no shorter path.
+		UpdateAdjacentDistances(shortestNode);
+
+		// Finalize the node with the lowest distance
+		shortestNode->Finalize();
+
+		// Sleep for some time to make the visualization better
+		std::this_thread::sleep_for(std::chrono::milliseconds(delayTime));
 	} while (shortestNode != finishNode);
 
 	// Draw path by tracing parents back from finish to start
@@ -224,7 +257,7 @@ void Pathfinding::GenerateStartFinish()
 	{
 		finish = gridDist(randomNumberGenerator);
 	} while (start == finish);
-
+	
 	// Set start and finish NodeTypes
 	grid.at(start)->SetNodeType(Node::NodeType::start);
 	grid.at(finish)->SetNodeType(Node::NodeType::finish);
@@ -234,6 +267,30 @@ void Pathfinding::GenerateStartFinish()
 
 	startNode = grid.at(start);
 	finishNode = grid.at(finish);
+}
+
+void Pathfinding::UpdateAdjacentDistances(std::shared_ptr<Node> node)
+{
+	// Update all distances to adjacent nodes of the given node and set the node as parent for them
+	// if they are not finalized yet and if there is no shorter path.
+	auto adjacentNodes = node->GetAdjacentNodes();
+	int minAdjacentDistance = std::numeric_limits<int>::max();
+
+	for (auto& adjacentNode : adjacentNodes)
+	{
+		// Set the distance of the adjacent node to the distance of the current node + the cost to get to the adjacent node if the adjacent node is not finalized
+		// and the new distance is shorter than the current distance
+		int newDistance = node->GetDistance() + adjacentNode->GetNodeCost();
+
+		if (!adjacentNode->IsFinalized() && newDistance < adjacentNode->GetDistance())
+		{
+			// Color the adjacentNode in adjacentColor
+			adjacentNode->ColorShortestOrAdjacent(false);
+
+			adjacentNode->SetDistance(newDistance);
+			adjacentNode->SetParent(node);
+		}
+	}
 }
 
 void Pathfinding::DrawPath()

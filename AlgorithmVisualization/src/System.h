@@ -8,7 +8,7 @@ extern std::recursive_mutex mtx;
 
 enum class ClickOptions
 {
-	dijkstra, a, breadth, depth, greedy, node, reset
+	dijkstra, a, breadth, depth, node, reset
 };
 
 class System

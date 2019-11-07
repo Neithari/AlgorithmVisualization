@@ -125,7 +125,7 @@ void Pathfinding::AStar()
 	DrawPath();
 }
 
-void Pathfinding::Breadth()
+void Pathfinding::BreadthFirst()
 {
 	// Reset a possible path back to fields, reset the distance and make everything not finalized
 	ResetGrid(false);
@@ -174,6 +174,62 @@ void Pathfinding::Breadth()
 		}
 		// Remove the current node from the top of the que
 		que.pop_front();
+		// Sleep for some time to make the visualization better
+		std::this_thread::sleep_for(std::chrono::milliseconds(delayTime));
+	}
+	// Draw path by tracing parents back from finish to start
+	DrawPath();
+}
+
+void Pathfinding::DepthFirst()
+{
+	// Reset a possible path back to fields, reset the distance and make everything not finalized
+	ResetGrid(false);
+
+	std::list<std::shared_ptr<Node>> stack;
+
+	// Insert start into the que
+	stack.push_back(startNode);
+	// Mark start as visited
+	startNode->Finalize();
+
+	// While something is inside the que...
+	while (stack.size() != 0)
+	{
+		// Save the current node
+		auto currentNode = stack.front();
+		// Remove the current node from the stack
+		stack.pop_front();
+		// Stop the search if we are at the finish node
+		if (currentNode == finishNode)
+		{
+			break;
+		}
+		// Color the current node
+		currentNode->ColorShortestOrAdjacent(true);
+
+		// ...get all adjacent nodes of the current node...
+		auto adjacentNodes = currentNode->GetAdjacentNodes();
+		// Go over every adjacent node
+		for (auto& adjacentNode : adjacentNodes)
+		{
+			// If the adjacent node was not visited before...
+			if (!adjacentNode->IsFinalized())
+			{
+				// ...color the current node...
+				adjacentNode->ColorShortestOrAdjacent(false);
+				// ...if it's no wall...
+				if (!adjacentNode->IsWall())
+				{
+					// ...add it to the stack...
+					stack.push_front(adjacentNode);
+					// ...and mark it as visited.
+					adjacentNode->Finalize();
+					// Set the parent to the node we are comming from
+					adjacentNode->SetParent(currentNode);
+				}
+			}
+		}
 		// Sleep for some time to make the visualization better
 		std::this_thread::sleep_for(std::chrono::milliseconds(delayTime));
 	}
@@ -317,6 +373,7 @@ void Pathfinding::GenerateStartFinish()
 	// Set start and finish NodeTypes
 	grid.at(start)->SetNodeType(Node::NodeType::start);
 	grid.at(finish)->SetNodeType(Node::NodeType::finish);
+
 	// Save start and finish nodes for easy access
 	// Lock mutex
 	std::lock_guard<std::recursive_mutex> lock(mtx);

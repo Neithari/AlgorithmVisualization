@@ -100,7 +100,6 @@ void System::SetupEverything()
 	topMenu.CreateButton(ClickOptions::a, "A*");
 	topMenu.CreateButton(ClickOptions::breadth, "Breadth-First");
 	topMenu.CreateButton(ClickOptions::depth, "Depth-First");
-	topMenu.CreateButton(ClickOptions::greedy, "Greedy");
 }
 
 void System::LoadFonts()
@@ -129,11 +128,10 @@ void System::HandleClickEvent()
 			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::AStar, &grid));
 			break;
 		case ClickOptions::breadth:
-			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::Breadth, &grid));
+			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::BreadthFirst, &grid));
 			break;
 		case ClickOptions::depth:
-			break;
-		case ClickOptions::greedy:
+			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::DepthFirst, &grid));
 			break;
 		case ClickOptions::reset:
 			grid.ResetGrid();

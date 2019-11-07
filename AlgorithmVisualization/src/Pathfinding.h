@@ -16,7 +16,8 @@ public:
 	// Pathfinding algorithms
 	void Dijkstra();
 	void AStar();
-	void Breadth();
+	void BreadthFirst();
+	void DepthFirst();
 
 private:
 	void BuildGrid();

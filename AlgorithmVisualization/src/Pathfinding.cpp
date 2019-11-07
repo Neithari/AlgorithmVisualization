@@ -42,9 +42,17 @@ void Pathfinding::Dijkstra()
 	ResetGrid(false);
 
 	std::shared_ptr<Node> shortestNode;
+	bool nodesToExplore = true;
 	
 	do
 	{
+		// If there are no nodes left to explore and the finish is not found stop the algorithm
+		if (!nodesToExplore)
+		{
+			return;
+		}
+		nodesToExplore = false;
+
 		int currentDistance = std::numeric_limits<int>::max();
 
 		// Iterate over all nodes in the grid to find the one with the lowest distance
@@ -53,6 +61,9 @@ void Pathfinding::Dijkstra()
 			// Pick the first node with the lowest distance that's not finalized yet
 			if (node->GetDistance() < currentDistance && !node->IsFinalized())
 			{
+				// Set to true as long as there are still nodes to explore
+				nodesToExplore = true;
+
 				// Set the currentDistance to the nodes distance to only get nodes with less distance in the following iterations
 				currentDistance = node->GetDistance();
 				// Set the shortestNode to the current node
@@ -83,9 +94,17 @@ void Pathfinding::AStar()
 	ResetGrid(false);
 
 	std::shared_ptr<Node> shortestNode;
+	bool nodesToExplore = true;
 
 	do
 	{
+		// If there are no nodes left to explore and the finish is not found stop the algorithm
+		if (!nodesToExplore)
+		{
+			return;
+		}
+		nodesToExplore = false;
+
 		int currentDistance = std::numeric_limits<int>::max();
 
 		// Iterate over all nodes in the grid to find the one with the lowest combined distance of distance and estimate distance
@@ -101,6 +120,9 @@ void Pathfinding::AStar()
 			// Pick the first node with the lowest distance that's not finalized yet
 			if (combinedDistance < currentDistance && !node->IsFinalized())
 			{
+				// Set to true as long as there are still nodes to explore
+				nodesToExplore = true;
+
 				// Set the currentDistance to the combined distance to only get nodes with less combined distance in the following iterations
 				currentDistance = combinedDistance;
 				// Set the shortestNode to the current node

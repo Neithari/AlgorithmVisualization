@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <memory>
+#include <list>
 #include <thread>
 #include <future>
 #include <mutex>

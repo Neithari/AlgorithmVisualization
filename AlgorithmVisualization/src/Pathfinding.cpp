@@ -125,6 +125,62 @@ void Pathfinding::AStar()
 	DrawPath();
 }
 
+void Pathfinding::Breadth()
+{
+	// Reset a possible path back to fields, reset the distance and make everything not finalized
+	ResetGrid(false);
+
+	std::list<std::shared_ptr<Node>> que;
+
+	// Insert start into the que
+	que.push_back(startNode);
+	// Mark start as visited
+	startNode->Finalize();
+
+	// While something is inside the que...
+	while (que.size() != 0)
+	{
+		// Stop the search if we are at the finish node
+		if (que.front() == finishNode)
+		{
+			break;
+		}
+		// Color the current node
+		que.front()->ColorShortestOrAdjacent(true);
+
+		// ...get all adjacent nodes of the first element...
+		auto adjacentNodes = que.front()->GetAdjacentNodes();
+		// Go over every adjacent node
+		for (auto& adjacentNode : adjacentNodes)
+		{
+			// If the adjacent node was not visited before...
+			if (!adjacentNode->IsFinalized())
+			{
+				// ...color the current node...
+				adjacentNode->ColorShortestOrAdjacent(false);
+				// ...if it's no wall...
+				if (!adjacentNode->IsWall())
+				{
+					// ...set the distance to this node to the distance of the node we are comming from + the cost to get to this node...
+					adjacentNode->SetDistance(que.front()->GetDistance() + adjacentNode->GetNodeCost());
+					// ...add it to the end of the que...
+					que.push_back(adjacentNode);
+					// ...and mark it as visited.
+					adjacentNode->Finalize();
+					// Set the parent to the node we are comming from
+					adjacentNode->SetParent(que.front());
+				}
+			}
+		}
+		// Remove the current node from the top of the que
+		que.pop_front();
+		// Sleep for some time to make the visualization better
+		std::this_thread::sleep_for(std::chrono::milliseconds(delayTime));
+	}
+	// Draw path by tracing parents back from finish to start
+	DrawPath();
+}
+
 void Pathfinding::BuildGrid()
 {
 	// Reserve enough space inside the vector

@@ -227,6 +227,11 @@ int Node::EstimateDistanceTo(const Node& target) const
 	return xDistance + yDistance;
 }
 
+bool Node::IsWall() const
+{
+	return type == NodeType::wall;
+}
+
 void Node::IdleState()
 {
 	// Lock mutex

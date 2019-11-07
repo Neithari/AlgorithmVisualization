@@ -129,6 +129,7 @@ void System::HandleClickEvent()
 			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::AStar, &grid));
 			break;
 		case ClickOptions::breadth:
+			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::Breadth, &grid));
 			break;
 		case ClickOptions::depth:
 			break;

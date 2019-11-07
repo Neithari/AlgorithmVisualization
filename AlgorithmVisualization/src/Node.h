@@ -24,7 +24,7 @@ public:
 	const int GetNodeCost() const;
 	// check if the node is already finalized
 	const bool IsFinalized() const;
-	// Set finalized to true and set the NodeType to path
+	// Set finalized to true
 	void Finalize();
 	std::vector<std::shared_ptr<Node>>& GetAdjacentNodes();
 	void SetDistance(int distance);
@@ -35,6 +35,7 @@ public:
 	void ColorShortestOrAdjacent(bool shortest);
 	// Estimate the distance to the given object
 	int EstimateDistanceTo(const Node& target) const;
+	bool IsWall()const;
 
 private:
 	// State behavior

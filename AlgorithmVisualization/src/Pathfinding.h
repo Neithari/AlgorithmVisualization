@@ -16,6 +16,7 @@ public:
 	// Pathfinding algorithms
 	void Dijkstra();
 	void AStar();
+	void Breadth();
 
 private:
 	void BuildGrid();
@@ -37,7 +38,7 @@ private:
 	const float yOffset = 60.0f;
 	
 	// Animation delay time in milliseconds
-	const int delayTime = 00;
+	const int delayTime = 20;
 
 	std::vector<std::shared_ptr<Node>> grid;
 	// Remember start and finish for pathfinding

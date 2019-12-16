@@ -16,8 +16,6 @@ System::System(const int windowWidth, const int windowHeight)
 	window(sf::VideoMode(windowWidth, windowHeight), "Algorithm Visualisation"),
 	topMenu(FontDustismoRoman)
 {
-	// Set the backgroundcolor
-
 	LoadFonts();
 }
 
@@ -51,10 +49,10 @@ sf::Vector2f System::GetMousePosition() const
 	return sf::Vector2f((float)mousePosition.x, (float)mousePosition.y);
 }
 
-void System::AddClickEvent(ClickOptions lable)
+void System::AddClickEvent(ClickOptions option)
 {
 	// Adds a click event to the que that will be processed in HandleClickEvent()
-	clickEventQ.push_back(lable);
+	clickEventQ.push_back(option);
 }
 
 void System::HandleSFEvents()
@@ -122,18 +120,62 @@ void System::HandleClickEvent()
 		switch (e)
 		{
 		case ClickOptions::dijkstra:
+			// Check if another algorithm is running. Speed it up and wait till it's finished before starting the next algorithm
+			if (algorithmRunning)
+			{
+				grid.SpeedUpAlgorithm();
+				algorithmFutures.back().wait();
+				algorithmRunning = !algorithmFutures.back().get();
+			}
+			algorithmRunning = true;
+
 			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::Dijkstra, &grid));
 			break;
 		case ClickOptions::a:
+			// Check if another algorithm is running. Speed it up and wait till it's finished before starting the next algorithm
+			if (algorithmRunning)
+			{
+				grid.SpeedUpAlgorithm();
+				algorithmFutures.back().wait();
+				algorithmRunning = !algorithmFutures.back().get();
+			}
+			algorithmRunning = true;
+
 			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::AStar, &grid));
 			break;
 		case ClickOptions::breadth:
+			// Check if another algorithm is running. Speed it up and wait till it's finished before starting the next algorithm
+			if (algorithmRunning)
+			{
+				grid.SpeedUpAlgorithm();
+				algorithmFutures.back().wait();
+				algorithmRunning = !algorithmFutures.back().get();
+			}
+			algorithmRunning = true;
+
 			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::BreadthFirst, &grid));
 			break;
 		case ClickOptions::depth:
+			// Check if another algorithm is running. Speed it up and wait till it's finished before starting the next algorithm
+			if (algorithmRunning)
+			{
+				grid.SpeedUpAlgorithm();
+				algorithmFutures.back().wait();
+				algorithmRunning = !algorithmFutures.back().get();
+			}
+			algorithmRunning = true;
+
 			algorithmFutures.push_back(std::async(std::launch::async, &Pathfinding::DepthFirst, &grid));
 			break;
 		case ClickOptions::reset:
+			// Check if an algorithm is running. Speed it up and wait till it's finished before resetting the grid
+			if (algorithmRunning)
+			{
+				grid.SpeedUpAlgorithm();
+				algorithmFutures.back().wait();
+				algorithmRunning = !algorithmFutures.back().get();
+			}
+
 			grid.ResetGrid();
 			break;
 		default:

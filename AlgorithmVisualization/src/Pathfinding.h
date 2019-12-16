@@ -13,11 +13,13 @@ public:
 	// If resetSpecial is false don't reset walls, start and finish.
 	void ResetGrid(bool resetSpecial = true);
 
-	// Pathfinding algorithms
-	void Dijkstra();
-	void AStar();
-	void BreadthFirst();
-	void DepthFirst();
+	// Pathfinding algorithms will return true when finished
+	bool Dijkstra();
+	bool AStar();
+	bool BreadthFirst();
+	bool DepthFirst();
+	// Set the algorithm delay time to 0 to let it finish faster
+	void SpeedUpAlgorithm();
 
 private:
 	void BuildGrid();
@@ -29,6 +31,8 @@ private:
 	void UpdateAdjacentDistances(std::shared_ptr<Node> node);
 	// Draw path from finish to start
 	void DrawPath();
+	// Reset the delay time back to normal
+	void ResetDelayTime();
 
 private:
 	const size_t gridSizeX = 46;
@@ -39,7 +43,9 @@ private:
 	const float yOffset = 60.0f;
 	
 	// Animation delay time in milliseconds
-	const int delayTime = 20;
+	const int delayTimeReset = 20;
+	int delayTime = delayTimeReset;
+	std::recursive_mutex mtxDelayTime;
 
 	std::vector<std::shared_ptr<Node>> grid;
 	// Remember start and finish for pathfinding

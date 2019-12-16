@@ -30,7 +30,7 @@ public: // Public functions go in here
 	// Gets the adjusted mouse position for our window
 	sf::Vector2f GetMousePosition() const;
 	// Adds a ClickEvent to the cue
-	void AddClickEvent(ClickOptions lable);
+	void AddClickEvent(ClickOptions option);
 
 private: // Private functions go in here
 	void HandleSFEvents();
@@ -55,7 +55,7 @@ private: // Private variables go in here
 	// Used to ensure only one system is present at any time
 	static System instance;
 	// Used to ensure Run() is only run once
-	int runNumber;
+	int runNumber = 0;
 	// The main window
 	sf::RenderWindow window;
 	// Fonts
@@ -63,8 +63,10 @@ private: // Private variables go in here
 	std::shared_ptr<sf::Font> FontDustismoRoman = std::make_shared<sf::Font>();
 	// Vector to store every click event for processing
 	std::vector<ClickOptions> clickEventQ;
+	// True if an algorithm is running
+	bool algorithmRunning = false;
 	// Vector of futures for std::async
-	std::vector<std::future<void>> algorithmFutures;
+	std::vector<std::future<bool>> algorithmFutures;
 
 	// Create menu
 	Menu topMenu;

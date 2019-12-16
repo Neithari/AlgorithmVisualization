@@ -36,8 +36,10 @@ void Pathfinding::ResetGrid(bool resetSpecial)
 	}
 }
 
-void Pathfinding::Dijkstra()
+bool Pathfinding::Dijkstra()
 {
+	// Reset the delay time before we start
+	ResetDelayTime();
 	// Reset a possible path back to fields, reset the distance and make everything not finalized
 	ResetGrid(false);
 
@@ -49,7 +51,7 @@ void Pathfinding::Dijkstra()
 		// If there are no nodes left to explore and the finish is not found stop the algorithm
 		if (!nodesToExplore)
 		{
-			return;
+			return true;
 		}
 		nodesToExplore = false;
 
@@ -86,10 +88,14 @@ void Pathfinding::Dijkstra()
 
 	// Draw path by tracing parents back from finish to start
 	DrawPath();
+
+	return true;
 }
 
-void Pathfinding::AStar()
+bool Pathfinding::AStar()
 {
+	// Reset the delay time before we start
+	ResetDelayTime();
 	// Reset a possible path back to fields, reset the distance and make everything not finalized
 	ResetGrid(false);
 
@@ -101,7 +107,7 @@ void Pathfinding::AStar()
 		// If there are no nodes left to explore and the finish is not found stop the algorithm
 		if (!nodesToExplore)
 		{
-			return;
+			return true;
 		}
 		nodesToExplore = false;
 
@@ -145,10 +151,14 @@ void Pathfinding::AStar()
 
 	// Draw path by tracing parents back from finish to start
 	DrawPath();
+
+	return true;
 }
 
-void Pathfinding::BreadthFirst()
+bool Pathfinding::BreadthFirst()
 {
+	// Reset the delay time before we start
+	ResetDelayTime();
 	// Reset a possible path back to fields, reset the distance and make everything not finalized
 	ResetGrid(false);
 
@@ -201,10 +211,14 @@ void Pathfinding::BreadthFirst()
 	}
 	// Draw path by tracing parents back from finish to start
 	DrawPath();
+
+	return true;
 }
 
-void Pathfinding::DepthFirst()
+bool Pathfinding::DepthFirst()
 {
+	// Reset the delay time before we start
+	ResetDelayTime();
 	// Reset a possible path back to fields, reset the distance and make everything not finalized
 	ResetGrid(false);
 
@@ -257,6 +271,15 @@ void Pathfinding::DepthFirst()
 	}
 	// Draw path by tracing parents back from finish to start
 	DrawPath();
+	
+	return true;
+}
+
+void Pathfinding::SpeedUpAlgorithm()
+{
+	// Lock delay time mutex
+	std::lock_guard<std::recursive_mutex> lock(mtxDelayTime);
+	delayTime = 0;
 }
 
 void Pathfinding::BuildGrid()
@@ -440,4 +463,11 @@ void Pathfinding::DrawPath()
 			parent = parent->GetParent();
 		} while (parent->GetGridCoords() != startNode->GetGridCoords());
 	}
+}
+
+void Pathfinding::ResetDelayTime()
+{
+	// Lock delay time mutex
+	std::lock_guard<std::recursive_mutex> lock(mtxDelayTime);
+	delayTime = delayTimeReset;
 }
